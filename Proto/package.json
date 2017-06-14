@@ -1,0 +1,29 @@
+{
+  "name": "doom",
+  "version": "1.0.0",
+  "description": "Soe Doom in DOM",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ErBlack/doom.git"
+  },
+  "keywords": [
+    "Doom",
+    "DOM"
+  ],
+  "author": "ErBlack",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ErBlack/doom/issues"
+  },
+  "homepage": "https://github.com/ErBlack/doom#readme",
+  "devDependencies": {
+    "css-loader": "^0.25.0",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.13.2"
+  }
+}
