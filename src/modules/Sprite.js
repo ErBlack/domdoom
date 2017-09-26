@@ -20,8 +20,8 @@ module.exports = class Sprite {
 
         this.position = position;
         this._size = size || [];
-        
-        this._flip = flip;
+
+        this._flip = Boolean(flip);
 
         this._antimationsLeft = animationCount;
 
@@ -57,6 +57,15 @@ module.exports = class Sprite {
         return this._frame;
     }
 
+    set flip(value) {
+        this._flip = Boolean(value);
+    }
+
+    set frameIndex(value) {
+        this._frameIndex = value;
+        this._frame = this._frames[value];
+    }
+
     finish() {
         if (this._finished) {
             return;
@@ -87,8 +96,7 @@ module.exports = class Sprite {
                 this._cycleTime = reminder;
             }
 
-            this._frameIndex = Math.floor(this._cycleTime / this._frameDuration);
-            this._frame = this._frames[this._frameIndex];
+            this.frameIndex = Math.floor(this._cycleTime / this._frameDuration);
         }
     }
 

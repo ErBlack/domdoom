@@ -19,6 +19,7 @@ class Canvas extends Component {
 
         this.main = this.main.bind(this);
         this._onClick = this._onClick.bind(this);
+        this._onMouseMove = this._onMouseMove.bind(this);
     }
 
     render() {
@@ -32,6 +33,7 @@ class Canvas extends Component {
                 width={CANVAS_WIDTH}
                 height={CANVAS_HEIGHT}
                 onClick={this._onClick}
+                onMouseMove={this._onMouseMove}
             >
             </canvas>
         );
@@ -98,6 +100,14 @@ class Canvas extends Component {
         ]);
     }
 
+    _onMouseMove(e) {
+        const rect = this._canvas.getBoundingClientRect();
+        this._beware([
+            e.clientX - rect.left,
+            e.clientY - rect.top
+        ]);
+    }
+
     _spawn(position) {
         this._effects.push(new Teleport({
             position
@@ -115,6 +125,12 @@ class Canvas extends Component {
         this._effects.push(new (hit ? Blood : Shot)({
             position
         }));
+    }
+
+    _beware(position) {
+        this._npc.forEach((npc) => {
+            return npc.beware(position);
+        });
     }
 }
 
