@@ -129,7 +129,7 @@ class Canvas extends Component {
 
     _beware(position) {
         this._npc.forEach((npc) => {
-            return npc.beware(position);
+            npc.beware(position);
         });
     }
 }

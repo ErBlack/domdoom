@@ -13,14 +13,25 @@ const DEATH_FRAME_OFFSETS = [
     [-41, -16]
 ];
 
+const GRAVE_BOTTOM = 612;
+
 const R = 31;
+
+const SHOTGUN_MIN_DEMAGE = 35;
+const SHOTGUN_MAX_DEMAGE = 105;
+const SHOTGUN_DAMAGE_FACTOR = (SHOTGUN_MAX_DEMAGE - SHOTGUN_MIN_DEMAGE) / R;
 
 export default class Cacodemon {
     constructor({ position }) {
+        position = position.concat();
+
         this._position = position;
         this._initialPosition = this._position.concat();
         this._hspeed = 0;
         this._vspeed = 0;
+
+        this._isDead = false;
+        this._hp = 4;
 
         this._panicDistance = 160;
 
@@ -41,14 +52,20 @@ export default class Cacodemon {
         const SR = Math.sqrt(Math.pow(sx - px, 2) + Math.pow(sy - py, 2));
         const hit = SR <= R;
 
-        if (hit) {
+        if (hit && !this._isDead) {
             this._drawHit();
+
+            this._takeDamage(R - SR);
         }
 
         return hit;
     }
 
     beware(coords) {
+        if (this._isDead) {
+            return;
+        }
+
         const v = new Vector(coords, this._position);
         const panicValue = this._panicDistance - v.length;
 
@@ -63,6 +80,24 @@ export default class Cacodemon {
         } else {
             this._goingHome = true;
         }
+    }
+
+    _takeDamage(hitrate) {
+        this._hp -= SHOTGUN_MIN_DEMAGE + (SHOTGUN_DAMAGE_FACTOR * hitrate);
+
+        if (this._hp <= 0) {
+            this._die();
+        }
+    }
+
+    _die() {
+        this._isDead = true;
+        this._gravePosition = [
+            this._position[0],
+            GRAVE_BOTTOM
+        ];
+        this._drawDeath();
+
     }
 
     _tryToGoHome() {
@@ -85,7 +120,22 @@ export default class Cacodemon {
         this._vspeed = ady > threshold ? Math.min(ady / summ * speed, ady * 3 / 1000) * Math.sign(dy) : 0;
     }
 
+    _tryToGoGrave() {
+        if (!this._isDead) {
+            return;
+        }
 
+        const [px, py] = this._position;
+        const [ix, iy] = this._gravePosition;
+
+        const dy = iy - py;
+        const ady = Math.abs(dy);
+        const speed = 0.2;
+        const threshold = 5;
+
+        this._hspeed = 0;
+        this._vspeed = ady > threshold ? speed * Math.sign(dy) : 0;
+    }
 
     _drawHit() {
         this._sprite = new Sprite({
@@ -110,9 +160,13 @@ export default class Cacodemon {
             position: this._position,
             animationSpeed: 7,
             animationCount: 1,
-            onFinish: function() {
-                this._sprite = this._mainSprite;
-            }.bind(this)
+            onFinish: () => {
+                this._sprite = new Sprite({
+                    frame: CACODEMON.death.slice(-1).pop(),
+                    frameOffsets: DEATH_FRAME_OFFSETS.slice(-1),
+                    position: this._position
+                })
+            }
         });
     }
 
@@ -143,6 +197,7 @@ export default class Cacodemon {
 
     update(dt) {
         this._tryToGoHome();
+        this._tryToGoGrave();
         this._turn();
         this._move(dt);
         this._sprite.update(...arguments);
