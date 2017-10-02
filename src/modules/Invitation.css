@@ -1,0 +1,48 @@
+.invitation
+{
+    position: relative;
+    z-index: 10;
+
+    box-sizing: padding-box;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 0 25px;
+}
+
+.invitation_header
+{
+    display: block;
+
+    max-width: 90%;
+    margin: 0 auto 25px auto;
+}
+
+.invitation_subheader
+{
+    margin-bottom: 25px;
+
+    text-align: center;
+
+    font-size: 22px;
+}
+
+.invintation_text
+{
+    margin-bottom: 15px;
+
+    text-align: center;
+
+    font-size: 22px;
+    line-height: 28px;
+}
+
+.invintation_disclamer
+{
+    max-width: 600px;
+    margin: auto;
+
+    text-align: justify;
+
+    font-size: 14px;
+    line-height: 16px;
+}

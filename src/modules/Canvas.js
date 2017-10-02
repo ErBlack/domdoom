@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { resourcesLoad } from './Resources.js';
 
+import './Canvas.css';
+
 import Wall from './Wall';
+import Pool from './Pool';
 import Shot from './Shot';
 import Blood from './Blood';
 import Teleport from './Teleport';
@@ -9,6 +12,7 @@ import Cacodemon from './Cacodemon';
 
 const CANVAS_WIDTH = 1024;
 const CANVAS_HEIGHT = 640;
+const CANVAS_AR = CANVAS_WIDTH / CANVAS_HEIGHT;
 
 class Canvas extends Component {
     constructor() {
@@ -20,6 +24,7 @@ class Canvas extends Component {
         this.main = this.main.bind(this);
         this._onClick = this._onClick.bind(this);
         this._onMouseMove = this._onMouseMove.bind(this);
+        this._onWindowResize = this._onWindowResize.bind(this);
     }
 
     render() {
@@ -32,6 +37,9 @@ class Canvas extends Component {
                 }}
                 width={CANVAS_WIDTH}
                 height={CANVAS_HEIGHT}
+                style={{
+                    transform: `scale(${this._scale()})`
+                }}
                 onClick={this._onClick}
                 onMouseMove={this._onMouseMove}
             >
@@ -57,15 +65,18 @@ class Canvas extends Component {
             this._2d.imageSmoothingEnabled = false;
 
             this._background = new Wall();
+            this._foreground = new Pool();
 
-            this._spawn([
-                512,
-                320
-            ]);
+            // this._spawn([
+            //     512,
+            //     320
+            // ]);
 
             this._time = Date.now();
             this.main();
         })
+
+        window.addEventListener('resize', this._onWindowResize);
     }
 
     update(dt) {
@@ -90,22 +101,44 @@ class Canvas extends Component {
         render(this._background);
         this._npc = this._npc.filter(render);
         this._effects = this._effects.filter(render);
+        render(this._foreground);
+    }
+
+    _scale() {
+        const {
+            innerWidth,
+            innerHeight
+        } = window;
+        const window_ar = innerWidth / innerHeight;
+
+        this._scaleFactor = window_ar > CANVAS_AR ? innerWidth / CANVAS_WIDTH : innerHeight / CANVAS_HEIGHT;
+
+        return this._scaleFactor;
     }
 
     _onClick(e) {
-        const rect = this._canvas.getBoundingClientRect();
-        this._shoot([
-            e.clientX - rect.left,
-            e.clientY - rect.top
-        ]);
+        this._shoot(this._eventPosition(e));
+    }
+
+    _onWindowResize() {
+        this._canvas.style.transform = `scale(${this._scale()})`;
     }
 
     _onMouseMove(e) {
+        this._beware(this._eventPosition(e));
+    }
+
+    _eventPosition(e) {
         const rect = this._canvas.getBoundingClientRect();
-        this._beware([
-            e.clientX - rect.left,
-            e.clientY - rect.top
-        ]);
+
+        return [
+            this._scaleValue(e.clientX - rect.left),
+            this._scaleValue(e.clientY - rect.top)
+        ];
+    }
+
+    _scaleValue(value) {
+        return value / this._scaleFactor;
     }
 
     _spawn(position) {

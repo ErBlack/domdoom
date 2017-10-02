@@ -1,0 +1,12 @@
+.canvas
+{
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+
+    margin-left: -512px;
+
+    transform-origin: bottom;
+
+    image-rendering: pixelated;
+}

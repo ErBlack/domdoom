@@ -31,7 +31,7 @@ export default class Cacodemon {
         this._vspeed = 0;
 
         this._isDead = false;
-        this._hp = 4;
+        this._hp = 400;
 
         this._panicDistance = 160;
 
@@ -80,6 +80,8 @@ export default class Cacodemon {
         } else {
             this._goingHome = true;
         }
+
+        this._recentMousePosition = coords;
     }
 
     _takeDamage(hitrate) {
@@ -125,8 +127,8 @@ export default class Cacodemon {
             return;
         }
 
-        const [px, py] = this._position;
-        const [ix, iy] = this._gravePosition;
+        const py = this._position[1];
+        const iy = this._gravePosition[1];
 
         const dy = iy - py;
         const ady = Math.abs(dy);
@@ -196,6 +198,10 @@ export default class Cacodemon {
     }
 
     update(dt) {
+        if (this._recentMousePosition) {
+            this.beware(this._recentMousePosition);
+        }
+
         this._tryToGoHome();
         this._tryToGoGrave();
         this._turn();
