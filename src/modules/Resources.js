@@ -15,6 +15,16 @@ function loadResource(src) {
     return image;
 }
 
+function loadSound(src) {
+    const audio = new Audio();
+    Object.assign(audio, {
+        preload: true,
+        src: src
+    });
+
+    return audio;
+}
+
 export const WALLS = {
     regular: [
         loadResource(require('../images/walls/wall48_1.png')),
@@ -108,9 +118,23 @@ export const CACODEMON = {
         loadResource(require('../images/npc/headj0.png')),
         loadResource(require('../images/npc/headk0.png')),
         loadResource(require('../images/npc/headl0.png'))
-    ]
+    ],
+    sound: {
+        pain: loadSound('sound/dsdmpain.wav'),
+        death: loadSound('sound/dscacdth.wav')
+    }
 }
 
 export const SHOTGUN = loadResource(require('../images/weapoons/shota0.png'));
+
+export const SHOTGUN_SOUND = {
+    reload: loadSound('sound/dswpnup.wav'),
+    shot: loadSound('sound/dsshotgn.wav')
+};
+
+export const ENVIRONMENT_SOUND = {
+    teleport: loadSound('sound/dstelept.wav'),
+    ost: loadSound('sound/cde1m1.mp3')
+};
 
 export const resourcesLoad = Promise.all(promises);

@@ -22,8 +22,10 @@ const SHOTGUN_MAX_DEMAGE = 105;
 const SHOTGUN_DAMAGE_FACTOR = (SHOTGUN_MAX_DEMAGE - SHOTGUN_MIN_DEMAGE) / R;
 
 export default class Cacodemon {
-    constructor({ position }) {
+    constructor({ position, onDeath }) {
         position = position.concat();
+
+        this._onDeath = onDeath;
 
         this._position = position;
         this._initialPosition = this._position.concat();
@@ -89,6 +91,8 @@ export default class Cacodemon {
 
         if (this._hp <= 0) {
             this._die();
+        } else {
+            CACODEMON.sound.pain.play();
         }
     }
 
@@ -98,8 +102,10 @@ export default class Cacodemon {
             this._position[0],
             GRAVE_BOTTOM
         ];
+        CACODEMON.sound.death.play();
         this._drawDeath();
 
+        this._onDeath();
     }
 
     _tryToGoHome() {

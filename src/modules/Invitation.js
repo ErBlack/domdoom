@@ -7,6 +7,8 @@ import MarsMap from './MarsMap.js';
 import Shotgun from './Shotgun.js';
 import Droptarget from './Droptarget.js';
 
+import { SHOTGUN_SOUND } from './Resources';
+
 const START_DATE = new Date('2017-10-14T15:00:00.000Z');
 const PLACE_URL = 'http://antimars.ru/';
 const WISHLIST_URL = 'https://raindrop.io/collection/9348';
@@ -75,7 +77,8 @@ export default class Invitation extends Component {
         window.dispatchEvent(event);
 
         this.setState({ hunt: true });
-        console.log('gun dropped');
+
+        SHOTGUN_SOUND.reload.play();
     }
 
     _onGunDragStart() {

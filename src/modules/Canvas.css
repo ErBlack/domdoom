@@ -13,5 +13,7 @@
 
 .canvas_hunt
 {
+    z-index: 30;
+
     cursor: crosshair;
 }

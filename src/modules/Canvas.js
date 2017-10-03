@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { resourcesLoad } from './Resources.js';
+import { resourcesLoad, ENVIRONMENT_SOUND, SHOTGUN_SOUND } from './Resources.js';
 
 import './Canvas.css';
 
@@ -26,6 +26,9 @@ class Canvas extends Component {
         this._onMouseMove = this._onMouseMove.bind(this);
         this._onWindowResize = this._onWindowResize.bind(this);
         this._onWindowHunt = this._onWindowHunt.bind(this);
+
+        this._reload = false;
+        this._hunt = false;
     }
 
     render() {
@@ -114,7 +117,9 @@ class Canvas extends Component {
     }
 
     _onClick(e) {
-        this._shoot(this._eventPosition(e));
+        if (!this._reload && this._hunt) {
+            this._shoot(this._eventPosition(e));
+        }
     }
 
     _onWindowResize() {
@@ -122,11 +127,27 @@ class Canvas extends Component {
     }
 
     _onWindowHunt() {
+        this._hunt = true;
         this._canvas.classList.add('canvas_hunt');
         this._spawn([
             512,
             320
-        ]);
+        ], () => {
+            setTimeout(() => {
+                this._hunt = false;
+                this._canvas.classList.remove('canvas_hunt');
+
+                ENVIRONMENT_SOUND.ost.pause();
+
+                setTimeout(() => {
+                    prompt('Что ж, какодемон убит. Ты победил. Пришли или скажи мне этот код первым и получишь приз:', '2017-IDKFA-WIN');
+                }, 1000);
+            }, 1000);
+        });
+
+        setTimeout(() => {
+            ENVIRONMENT_SOUND.ost.play()
+        }, 1500);
     }
 
     _onMouseMove(e) {
@@ -146,16 +167,28 @@ class Canvas extends Component {
         return value / this._scaleFactor;
     }
 
-    _spawn(position) {
+    _spawn(position, onDeath) {
         this._effects.push(new Teleport({
             position
         }));
+
+        ENVIRONMENT_SOUND.teleport.play();
+
         this._npc.push(new Cacodemon({
-            position
+            position,
+            onDeath
         }));
     }
 
     _shoot(position) {
+        SHOTGUN_SOUND.shot.play();
+
+        this._reload = true;
+
+        setTimeout(() => {
+            this._reload = false;
+        }, 1000);
+
         const hit = this._npc.some((npc) => {
             return npc.shot(position);
         });
