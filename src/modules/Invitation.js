@@ -4,6 +4,8 @@ import Timer from './Timer.js';
 
 import header from '../images/text/title.png';
 import MarsMap from './MarsMap.js';
+import Shotgun from './Shotgun.js';
+import Droptarget from './Droptarget.js';
 
 const START_DATE = new Date('2017-10-14T15:00:00.000Z');
 const PLACE_URL = 'http://antimars.ru/';
@@ -11,9 +13,22 @@ const WISHLIST_URL = 'https://raindrop.io/collection/9348';
 const STEAM_URL = 'https://steamcommunity.com/id/ErBlack/wishlist';
 
 export default class Invitation extends Component {
+    constructor() {
+        super();
+
+        this._onGunDrop = this._onGunDrop.bind(this);
+        this._onGunDragStart = this._onGunDragStart.bind(this);
+        this._onGunDragStop = this._onGunDragStop.bind(this);
+
+        this.state = {
+            dragging: false,
+            hunt: false
+        }
+    }
+
     render() {
         return (
-            <div className="invitation">
+            <div className={`invitation invitation_dragging_${this.state.dragging} invitation_hunt_${this.state.hunt}`}>
                 <img src={header} className="invitation_header" alt="Welcome to the DOOMSDAY" />
                 <div className="invitation_subheader">
                     Приглашаю на день рождения
@@ -24,7 +39,11 @@ export default class Invitation extends Component {
                     Мероприятие пройдёт <a href={PLACE_URL}>на марсе</a> {START_DATE.toLocaleDateString()} в {START_DATE.toLocaleTimeString()}.
                 </div>
                 <div className="invintation_disclamer">
-                    <abbr title="Union Aerospace Corporation">UAC</abbr> не несёт отвественности за вашу жизнь и здоровье на мероприятии. На случай внезапного портала в ад, можете прихватить <span draggable>дробовик</span>.
+                    <abbr title="Union Aerospace Corporation">UAC</abbr> не несёт отвественности за вашу жизнь и здоровье на мероприятии.
+                    На случай внезапного портала в ад, можете прихватить <Shotgun
+                        onDragStart={this._onGunDragStart}
+                        onDragStop={this._onGunDragStop}
+                    />.
                 </div>
                 <h2>Карта</h2>
                 <MarsMap />
@@ -45,7 +64,25 @@ export default class Invitation extends Component {
                     <a className="invintation_link invintation_link_steam" href={STEAM_URL}>В стим</a>
                     <a className="invintation_link invintation_link_chat">Чат</a>
                 </div>
+                <Droptarget onDrop={this._onGunDrop} />
             </div>
         );
+    }
+
+    _onGunDrop() {
+        const event = new Event('hunt');
+
+        window.dispatchEvent(event);
+
+        this.setState({ hunt: true });
+        console.log('gun dropped');
+    }
+
+    _onGunDragStart() {
+        this.setState({ dragging: true });
+    }
+
+    _onGunDragStop() {
+        this.setState({ dragging: false });
     }
 }

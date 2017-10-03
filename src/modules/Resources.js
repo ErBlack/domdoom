@@ -111,4 +111,6 @@ export const CACODEMON = {
     ]
 }
 
+export const SHOTGUN = loadResource(require('../images/weapoons/shota0.png'));
+
 export const resourcesLoad = Promise.all(promises);

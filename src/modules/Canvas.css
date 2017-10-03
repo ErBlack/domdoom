@@ -10,3 +10,8 @@
 
     image-rendering: pixelated;
 }
+
+.canvas_hunt
+{
+    cursor: crosshair;
+}

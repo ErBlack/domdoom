@@ -25,6 +25,7 @@ class Canvas extends Component {
         this._onClick = this._onClick.bind(this);
         this._onMouseMove = this._onMouseMove.bind(this);
         this._onWindowResize = this._onWindowResize.bind(this);
+        this._onWindowHunt = this._onWindowHunt.bind(this);
     }
 
     render() {
@@ -67,16 +68,12 @@ class Canvas extends Component {
             this._background = new Wall();
             this._foreground = new Pool();
 
-            // this._spawn([
-            //     512,
-            //     320
-            // ]);
-
             this._time = Date.now();
             this.main();
         })
 
         window.addEventListener('resize', this._onWindowResize);
+        window.addEventListener('hunt', this._onWindowHunt);
     }
 
     update(dt) {
@@ -122,6 +119,14 @@ class Canvas extends Component {
 
     _onWindowResize() {
         this._canvas.style.transform = `scale(${this._scale()})`;
+    }
+
+    _onWindowHunt() {
+        this._canvas.classList.add('canvas_hunt');
+        this._spawn([
+            512,
+            320
+        ]);
     }
 
     _onMouseMove(e) {

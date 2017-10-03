@@ -1,0 +1,16 @@
+.droptarget
+{
+    position: fixed;
+    z-index: 20;
+    right: 25px;
+    bottom: 0;
+
+    width: 180px;
+    height: 100px;
+
+    transition: transform .5s ease-in-out;
+
+    border: solid 2px #0b0b0b;
+    outline: dashed 2px #a7a7a7;
+    background:#1b1b1b;
+}
