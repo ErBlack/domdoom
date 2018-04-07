@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './Invitation.css';
-import Timer from './Timer.js';
 
 import header from '../images/text/title.png';
 import MarsMap from './MarsMap.js';
@@ -33,13 +32,9 @@ export default class Invitation extends Component {
         return (
             <div className={`invitation invitation_dragging_${this.state.dragging} invitation_hunt_${this.state.hunt}`}>
                 <img src={header} className="invitation_header" alt="Welcome to the DOOMSDAY" />
-                <div className="invitation_subheader">
-                    Приглашаю на день рождения
-                </div>
-                <Timer start={START_DATE} />
                 <h2>Описание</h2>
                 <div className="invintation_text">
-                    Мероприятие пройдёт <a href={PLACE_URL}>на марсе</a> {START_DATE.toLocaleDateString()} в {START_DATE.toLocaleTimeString()}.
+                    Мероприятие прошло <a href={PLACE_URL}>на марсе</a> {START_DATE.toLocaleDateString()}.
                 </div>
                 <div className="invintation_disclamer">
                     <abbr title="Union Aerospace Corporation">UAC</abbr> не несёт отвественности за вашу жизнь и здоровье на мероприятии.

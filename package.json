@@ -1,5 +1,5 @@
 {
-  "name": "doom",
+  "name": "doomsday",
   "version": "0.1.0",
   "private": true,
   "homepage": "https://erblack.me/doomsday/",
@@ -17,6 +17,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "pages": "node ./pages.js"
+    "predeploy": "PUBLIC_URL=/doomsday npm run build -- -",
+    "deploy": "gh-pages -d build -r https://github.com/ErBlack/doomsday.git"
   }
 }
