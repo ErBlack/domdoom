@@ -1,7 +1,14 @@
 .map
 {
+    position: relative;
+
     margin-bottom: 25px;
 
     background: #f7f2d9;
     text-shadow: none;
+}
+
+.map > div
+{
+    max-width: 100%;
 }
