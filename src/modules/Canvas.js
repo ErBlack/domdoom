@@ -138,10 +138,6 @@ class Canvas extends Component {
                 this._canvas.classList.remove('canvas_hunt');
 
                 ENVIRONMENT_SOUND.ost.pause();
-
-                setTimeout(() => {
-                    prompt('Что ж, какодемон убит. Ты победил. Пришли или скажи мне этот код первым и получишь приз:', '2017-IDKFA-WIN');
-                }, 1000);
             }, 1000);
         });
 
